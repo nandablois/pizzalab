@@ -1,9 +1,11 @@
 import type { Pizza } from '../types/pizza';
 import {
   Table, TableBody, TableCell, TableContainer,
-  TableHead, TableRow, Paper, Button, Box
+  TableHead, TableRow, Paper, Button, Box,
 } from '@mui/material';
+import { useState } from 'react';
 import { deletePizza } from '../api/pizza';
+import ConfirmDialog from './confirmdiaolog';
 
 interface Props {
   pizzas: Pizza[];
@@ -12,28 +14,32 @@ interface Props {
 }
 
 export default function PizzaList({ pizzas, onEdit, onDeleted }: Props) {
-  const handleDelete = async (id?: number) => {
-    if (id && confirm('Tem certeza que deseja excluir?')) {
-      await deletePizza(id);
-      onDeleted();
+  const [openDialog, setOpenDialog] = useState(false);
+  const [selectedPizzaId, setSelectedPizzaId] = useState<number | null>(null);
+
+  const handleOpenDialog = (id?: number) => {
+    if (id) {
+      setSelectedPizzaId(id);
+      setOpenDialog(true);
     }
   };
 
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+    setSelectedPizzaId(null);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (selectedPizzaId) {
+      await deletePizza(selectedPizzaId);
+      onDeleted();
+    }
+    handleCloseDialog();
+  };
+
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center'
-      }}
-    >
-      <TableContainer
-        component={Paper}
-        sx={{
-          maxWidth: 500, 
-          width: '100%',
-        }}
-      >
+    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <TableContainer component={Paper} sx={{ maxWidth: 500, width: '100%' }}>
         <Table size="small">
           <TableHead>
             <TableRow>
@@ -71,7 +77,7 @@ export default function PizzaList({ pizzas, onEdit, onDeleted }: Props) {
                       variant="outlined"
                       size="small"
                       color="error"
-                      onClick={() => handleDelete(pizza.id)}
+                      onClick={() => handleOpenDialog(pizza.id)}
                     >
                       Excluir
                     </Button>
@@ -82,6 +88,13 @@ export default function PizzaList({ pizzas, onEdit, onDeleted }: Props) {
           </TableBody>
         </Table>
       </TableContainer>
+      <ConfirmDialog
+        open={openDialog}
+        onClose={handleCloseDialog}
+        onConfirm={handleConfirmDelete}
+        title="Confirmar exclusão"
+        content="Tem certeza que deseja excluir esta pizza?"
+      />
     </Box>
   );
 }
