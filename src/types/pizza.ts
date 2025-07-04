@@ -1,6 +1,6 @@
 export interface Pizza {
     id?: number,
     descricao: string,
-    preco: number,
+    preco?: number,
     categoria: string
 }

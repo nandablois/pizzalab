@@ -1,7 +1,7 @@
 import type { Pizza } from '../types/pizza';
 import {
   Table, TableBody, TableCell, TableContainer,
-  TableHead, TableRow, Paper, Button
+  TableHead, TableRow, Paper, Button, Box
 } from '@mui/material';
 import { deletePizza } from '../api/pizza';
 
@@ -20,40 +20,68 @@ export default function PizzaList({ pizzas, onEdit, onDeleted }: Props) {
   };
 
   return (
-    <TableContainer component={Paper}>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Descrição</TableCell>
-            <TableCell>Preço</TableCell>
-            <TableCell>Categoria</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {!Array.isArray(pizzas) ? (
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
+      }}
+    >
+      <TableContainer
+        component={Paper}
+        sx={{
+          maxWidth: 800, 
+          width: '100%',
+        }}
+      >
+        <Table size="small">
+          <TableHead>
             <TableRow>
-              <TableCell colSpan={5}>Erro ao carregar pizzas.</TableCell>
+              <TableCell>Descrição</TableCell>
+              <TableCell>Preço</TableCell>
+              <TableCell>Categoria</TableCell>
+              <TableCell>Ações</TableCell>
             </TableRow>
-          ) : pizzas.length === 0 ? (
-            <TableRow>
-              <TableCell colSpan={5}>Nenhuma pizza cadastrada.</TableCell>
-            </TableRow>
-          ) : (
-            pizzas.map((pizza) => (
-              <TableRow key={pizza.id}>
-               
-                <TableCell>{pizza.descricao}</TableCell>
-                <TableCell>R$ {pizza.preco.toFixed(2)}</TableCell>
-                <TableCell>{pizza.categoria}</TableCell>
-                <TableCell>
-                  <Button onClick={() => onEdit(pizza)}>Editar</Button>
-                  <Button color="error" onClick={() => handleDelete(pizza.id)}>Excluir</Button>
-                </TableCell>
+          </TableHead>
+          <TableBody>
+            {!Array.isArray(pizzas) ? (
+              <TableRow>
+                <TableCell colSpan={4}>Erro ao carregar pizzas.</TableCell>
               </TableRow>
-            ))
-          )}
-        </TableBody>
-      </Table>
-    </TableContainer>
+            ) : pizzas.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={4}>Nenhuma pizza cadastrada.</TableCell>
+              </TableRow>
+            ) : (
+              pizzas.map((pizza) => (
+                <TableRow key={pizza.id}>
+                  <TableCell>{pizza.descricao}</TableCell>
+                  <TableCell>R$ {pizza.preco?.toFixed(2)}</TableCell>
+                  <TableCell>{pizza.categoria}</TableCell>
+                  <TableCell>
+                    <Button
+                      variant="outlined"
+                      size="small"
+                      onClick={() => onEdit(pizza)}
+                      sx={{ mr: 1 }}
+                    >
+                      Editar
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      size="small"
+                      color="error"
+                      onClick={() => handleDelete(pizza.id)}
+                    >
+                      Excluir
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Box>
   );
 }

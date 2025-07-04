@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { TextField, Button, Paper, Box } from '@mui/material';
+import { TextField, Button, Paper, Box, Typography } from '@mui/material';
 import type { Pizza } from '../types/pizza';
 import { createPizza, updatePizza } from '../api/pizza';
 
@@ -38,51 +38,66 @@ export default function PizzaForm({ onSaved, editingPizza }: Props) {
       } else {
         await createPizza(pizza);
       }
-      setPizza({
 
+      setPizza({
         descricao: '',
-        preco: 0,
+        preco: undefined,
         categoria: ''
       });
+
       onSaved();
     } catch (error) {
       console.error('Erro ao salvar pizza:', error);
-      alert('Erro ao salvar pizza. Veja o console para mais detalhes.');
     }
   };
 
   return (
-    <Paper sx={{ p: 2, mb: 2 }}>
-      <form onSubmit={handleSubmit}>
-        <Box display="flex" flexDirection="column" gap={2}>
-          <TextField
-            label="Descrição"
-            name="descricao"
-            value={pizza.descricao}
-            onChange={handleChange}
-            required
-          />
-          <TextField
-            label="Preço"
-            name="preco"
-            type="number"
-            inputProps={{ step: '0.01' }}
-            value={pizza.preco}
-            onChange={handleChange}
-            required
-          />
-          <TextField
-            label="Categoria"
-            name="categoria"
-            value={pizza.categoria}
-            onChange={handleChange}
-            required
-          />
-          <Button type="submit" variant="contained">
-            {pizza.id ? 'Atualizar' : 'Criar'}
-          </Button>
-        </Box>
-      </form>
-    </Paper>
+    <Box
+      display="flex"
+      justifyContent="center"
+      mt={2}
+    >
+      <Paper sx={{ p: 4, width: '100%', maxWidth: 500 }}>
+        <Typography variant="h4" align='center' gutterBottom >
+          PizzaLab 🍕
+        </Typography>
+        <Typography variant="h6" gutterBottom>
+          {pizza.id ? 'Editar Pizza' : 'Cadastrar Pizza'}
+        </Typography>
+        <form onSubmit={handleSubmit}>
+          <Box display="flex" flexDirection="column" gap={2}>
+            <TextField
+              label="Descrição"
+              name="descricao"
+              value={pizza.descricao}
+              onChange={handleChange}
+              required
+              fullWidth
+            />
+            <TextField
+              label="Preço"
+              name="preco"
+              type="number"
+              inputProps={{ step: '0.01', min: 0 }}
+              value={pizza.preco}
+              onChange={handleChange}
+              required
+              fullWidth
+            />
+            <TextField
+              label="Categoria"
+              name="categoria"
+              value={pizza.categoria}
+              onChange={handleChange}
+              required
+              fullWidth
+            />
+            <Button type="submit" variant="contained" size="large">
+              {pizza.id ? 'Atualizar' : 'Criar'}
+            </Button>
+          </Box>
+        </form>
+      </Paper>
+    </Box>
   );
 }
