@@ -3,7 +3,7 @@ import PizzaForm from './components/pizzaform';
 import PizzaList from './components/pizzalist';
 import type { Pizza } from './types/pizza';
 import { getPizzas } from './api/pizza';
-import { Box, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 
 export default function Home() {
   const [pizzas, setPizzas] = useState<Pizza[]>([]);

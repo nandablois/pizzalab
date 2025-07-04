@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { TextField, Button, Paper, Box, Typography } from '@mui/material';
 import type { Pizza } from '../types/pizza';
 import { createPizza, updatePizza } from '../api/pizza';
+import { Select, MenuItem, InputLabel, FormControl } from '@mui/material';
+
 
 interface Props {
   onSaved: () => void;
@@ -10,7 +12,7 @@ interface Props {
 
 export default function PizzaForm({ onSaved, editingPizza }: Props) {
   const [pizza, setPizza] = useState<Pizza>({
-    descricao: '',
+    sabor: '',
     preco: 0,
     categoria: ''
   });
@@ -40,8 +42,8 @@ export default function PizzaForm({ onSaved, editingPizza }: Props) {
       }
 
       setPizza({
-        descricao: '',
-        preco: undefined,
+        sabor: '',
+        preco: 0,
         categoria: ''
       });
 
@@ -67,9 +69,9 @@ export default function PizzaForm({ onSaved, editingPizza }: Props) {
         <form onSubmit={handleSubmit}>
           <Box display="flex" flexDirection="column" gap={2}>
             <TextField
-              label="Descrição"
-              name="descricao"
-              value={pizza.descricao}
+              label="Sabor"
+              name="sabor"
+              value={pizza.sabor}
               onChange={handleChange}
               required
               fullWidth
@@ -81,17 +83,24 @@ export default function PizzaForm({ onSaved, editingPizza }: Props) {
               inputProps={{ step: '0.01', min: 0 }}
               value={pizza.preco}
               onChange={handleChange}
+              onFocus={(e) => e.target.select()}
               required
               fullWidth
             />
-            <TextField
-              label="Categoria"
-              name="categoria"
-              value={pizza.categoria}
-              onChange={handleChange}
-              required
-              fullWidth
-            />
+            <FormControl fullWidth required>
+              <InputLabel id="categoria-label">Categoria</InputLabel>
+              <Select
+                labelId="categoria-label"
+                name="categoria"
+                value={pizza.categoria}
+                label="Categoria"
+                onChange={(e) => setPizza(prev => ({ ...prev, categoria: e.target.value }))}
+              >
+                <MenuItem value="Tradicional">Salgada</MenuItem>
+                <MenuItem value="Doce">Doce</MenuItem>
+                <MenuItem value="Especial">Especial</MenuItem>
+              </Select>
+            </FormControl>
             <Button type="submit" variant="contained" size="large">
               {pizza.id ? 'Atualizar' : 'Criar'}
             </Button>

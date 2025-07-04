@@ -30,14 +30,14 @@ export default function PizzaList({ pizzas, onEdit, onDeleted }: Props) {
       <TableContainer
         component={Paper}
         sx={{
-          maxWidth: 800, 
+          maxWidth: 500, 
           width: '100%',
         }}
       >
         <Table size="small">
           <TableHead>
             <TableRow>
-              <TableCell>Descrição</TableCell>
+              <TableCell>Sabor</TableCell>
               <TableCell>Preço</TableCell>
               <TableCell>Categoria</TableCell>
               <TableCell>Ações</TableCell>
@@ -55,8 +55,8 @@ export default function PizzaList({ pizzas, onEdit, onDeleted }: Props) {
             ) : (
               pizzas.map((pizza) => (
                 <TableRow key={pizza.id}>
-                  <TableCell>{pizza.descricao}</TableCell>
-                  <TableCell>R$ {pizza.preco?.toFixed(2)}</TableCell>
+                  <TableCell>{pizza.sabor}</TableCell>
+                  <TableCell>R$ {pizza.preco.toFixed(2)}</TableCell>
                   <TableCell>{pizza.categoria}</TableCell>
                   <TableCell>
                     <Button
