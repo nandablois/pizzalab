@@ -8,17 +8,17 @@ import { Box } from '@mui/material';
 export default function App() {
   const [pizzas, setPizzas] = useState<Pizza[]>([]);
   const [pizzaToEdit, setPizzaToEdit] = useState<Pizza | null>(null);
-  const [loading, setLoading] = useState<boolean>(true); // Adicionado aqui
+  const [loading, setLoading] = useState<boolean>(true); 
 
   const fetchPizzas = async () => {
-    setLoading(true); // Ativa o loading
+    setLoading(true);
     try {
       const res = await getPizzas();
       setPizzas(res.data);
     } catch (error) {
       console.error('Erro ao buscar pizzas:', error);
     } finally {
-      setLoading(false); // Desativa o loading
+      setLoading(false); 
     }
   };
 
