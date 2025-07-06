@@ -96,7 +96,7 @@ export default function PizzaForm({ onSaved, editingPizza }: Props) {
                 label="Categoria"
                 onChange={(e) => setPizza(prev => ({ ...prev, categoria: e.target.value }))}
               >
-                <MenuItem value="Tradicional">Salgada</MenuItem>
+                <MenuItem value="Salgada">Salgada</MenuItem>
                 <MenuItem value="Doce">Doce</MenuItem>
                 <MenuItem value="Especial">Especial</MenuItem>
               </Select>
