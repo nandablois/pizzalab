@@ -2,7 +2,7 @@ import axios from "axios";
 import type { Pizza } from "../types/pizza";
 
 
-const API = 'http://localhost:3333/pizza-lab';
+const API = import.meta.env.VITE_APP_URL || 'http://localhost:3333/pizza-lab';
 
 export const getPizzas = () => axios.get<Pizza[]>(`${API}`);
 export const createPizza = (pizza: Pizza) => axios.post(`${API}`, pizza);
