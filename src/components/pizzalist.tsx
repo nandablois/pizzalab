@@ -1,7 +1,7 @@
 import type { Pizza } from '../types/pizza';
 import {
   Table, TableBody, TableCell, TableContainer,
-  TableHead, TableRow, Paper, Button, Box, Tooltip,
+  TableHead, TableRow, Paper, Button, Box, Tooltip, CircularProgress
 } from '@mui/material';
 import { useState } from 'react';
 import { deletePizza } from '../api/pizza';
@@ -11,9 +11,10 @@ interface Props {
   pizzas: Pizza[];
   onEdit: (pizza: Pizza) => void;
   onDeleted: () => void;
+  loading: boolean;
 }
 
-export default function PizzaList({ pizzas, onEdit, onDeleted }: Props) {
+export default function PizzaList({ pizzas, onEdit, onDeleted, loading }: Props) {
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedPizzaId, setSelectedPizzaId] = useState<number | null>(null);
 
@@ -50,7 +51,15 @@ export default function PizzaList({ pizzas, onEdit, onDeleted }: Props) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {!Array.isArray(pizzas) ? (
+            {loading ? (
+              <TableRow>
+                <TableCell colSpan={4} align="center">
+                  <Box sx={{ display: 'flex', justifyContent: 'center', py: 2 }}>
+                    <CircularProgress size={24} />
+                  </Box>
+                </TableCell>
+              </TableRow>
+            ) : !Array.isArray(pizzas) ? (
               <TableRow>
                 <TableCell colSpan={4}>Erro ao carregar pizzas.</TableCell>
               </TableRow>
@@ -73,7 +82,9 @@ export default function PizzaList({ pizzas, onEdit, onDeleted }: Props) {
                       <span>{pizza.sabor}</span>
                     </Tooltip>
                   </TableCell>
-                  <TableCell>R$ {pizza.preco.toFixed(2)}</TableCell>
+                  <TableCell sx={{ maxWidth: 100, whiteSpace: 'nowrap', overflow: 'hidden' }}>
+                    R$ {pizza.preco.toFixed(2)}
+                  </TableCell>
                   <TableCell>{pizza.categoria}</TableCell>
                   <TableCell>
                     <Button

@@ -5,13 +5,21 @@ import type { Pizza } from './types/pizza';
 import { getPizzas } from './api/pizza';
 import { Box } from '@mui/material';
 
-export default function Home() {
+export default function App() {
   const [pizzas, setPizzas] = useState<Pizza[]>([]);
   const [pizzaToEdit, setPizzaToEdit] = useState<Pizza | null>(null);
+  const [loading, setLoading] = useState<boolean>(true); // Adicionado aqui
 
   const fetchPizzas = async () => {
-    const res = await getPizzas();
-    setPizzas(res.data);
+    setLoading(true); // Ativa o loading
+    try {
+      const res = await getPizzas();
+      setPizzas(res.data);
+    } catch (error) {
+      console.error('Erro ao buscar pizzas:', error);
+    } finally {
+      setLoading(false); // Desativa o loading
+    }
   };
 
   useEffect(() => {
@@ -22,7 +30,7 @@ export default function Home() {
     <Box
       sx={{
         backgroundImage: `url('/pizzalab-background.jpg')`,
-        minHeight: ' 100vh',
+        minHeight: '100vh',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -45,6 +53,7 @@ export default function Home() {
           pizzas={pizzas}
           onEdit={(pizza) => setPizzaToEdit(pizza)}
           onDeleted={fetchPizzas}
+          loading={loading} 
         />
       </Box>
     </Box>
