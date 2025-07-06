@@ -1,7 +1,7 @@
 import type { Pizza } from '../types/pizza';
 import {
   Table, TableBody, TableCell, TableContainer,
-  TableHead, TableRow, Paper, Button, Box,
+  TableHead, TableRow, Paper, Button, Box, Tooltip,
 } from '@mui/material';
 import { useState } from 'react';
 import { deletePizza } from '../api/pizza';
@@ -43,10 +43,10 @@ export default function PizzaList({ pizzas, onEdit, onDeleted }: Props) {
         <Table size="small">
           <TableHead>
             <TableRow>
-              <TableCell>Sabor</TableCell>
-              <TableCell>Preço</TableCell>
-              <TableCell>Categoria</TableCell>
-              <TableCell>Ações</TableCell>
+              <TableCell sx={{ width: '40%' }}>Sabor</TableCell>
+              <TableCell sx={{ width: '20%' }}>Preço</TableCell>
+              <TableCell sx={{ width: '20%' }}>Categoria</TableCell>
+              <TableCell sx={{ width: '20%' }}>Ações</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -61,7 +61,18 @@ export default function PizzaList({ pizzas, onEdit, onDeleted }: Props) {
             ) : (
               pizzas.map((pizza) => (
                 <TableRow key={pizza.id}>
-                  <TableCell>{pizza.sabor}</TableCell>
+                  <TableCell
+                    sx={{
+                      maxWidth: 150,
+                      whiteSpace: 'nowrap',
+                      overflow: 'hidden',
+                      textOverflow: 'revert',
+                    }}
+                  >
+                    <Tooltip title={pizza.sabor}>
+                      <span>{pizza.sabor}</span>
+                    </Tooltip>
+                  </TableCell>
                   <TableCell>R$ {pizza.preco.toFixed(2)}</TableCell>
                   <TableCell>{pizza.categoria}</TableCell>
                   <TableCell>
@@ -78,6 +89,7 @@ export default function PizzaList({ pizzas, onEdit, onDeleted }: Props) {
                       size="small"
                       color="error"
                       onClick={() => handleOpenDialog(pizza.id)}
+                      sx={{ mt: 1 }}
                     >
                       Excluir
                     </Button>
@@ -88,6 +100,7 @@ export default function PizzaList({ pizzas, onEdit, onDeleted }: Props) {
           </TableBody>
         </Table>
       </TableContainer>
+
       <ConfirmDialog
         open={openDialog}
         onClose={handleCloseDialog}
