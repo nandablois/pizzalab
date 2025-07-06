@@ -2,7 +2,7 @@ import axios from "axios";
 import type { Pizza } from "../types/pizza";
 
 
-const API = import.meta.env.VITE_APP_URL
+const API = import.meta.env.VITE_API_URL
 
 export const getPizzas = () => axios.get<Pizza[]>(`${API}`);
 export const createPizza = (pizza: Pizza) => axios.post(`${API}`, pizza);
